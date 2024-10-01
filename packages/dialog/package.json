@@ -21,6 +21,17 @@
     "./style.css": {
       "import": "./lib/style.css",
       "require": "./lib/style.css"
+    },
+    "./package.json": "./package.json"
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./*.js"
+      ],
+      "./style.css": [
+        "./lib/style.css"
+      ]
     }
   },
   "files": [
@@ -40,6 +51,9 @@
   "devDependencies": {
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
+  },
+  "dependencies": {
+    "rc-dialog": "latest"
   },
   "peerDependencies": {
     "react": ">= 17.0.0",

@@ -1,16 +1,22 @@
-import { useState } from 'react'
+import type { DialogProps } from 'rc-dialog'
+import Dialog from 'rc-dialog'
 
 import './styles.css'
 
-export function Counter1() {
-  const [count, setCount] = useState(0)
+interface ModalProps extends DialogProps {}
 
+function Modal(props: ModalProps) {
   return (
-    <div>
-      <button onClick={() => setCount(count => count + 1)}>
-        count is:
-        {count}
-      </button>
-    </div>
+    <Dialog
+      animation="zoom"
+      maskAnimation="fade"
+      {...props}
+    >
+      {props?.children && props.children}
+    </Dialog>
   )
 }
+
+export type { ModalProps }
+export { Modal }
+export default Modal

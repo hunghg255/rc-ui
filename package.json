@@ -10,8 +10,9 @@
     "node": ">=18.0.0"
   },
   "scripts": {
-    "build": "pnpm -r run build",
+    "build": "pnpm --filter \"./packages/**\" build",
     "docs": "pnpm -C docs run docs:dev",
+    "playground": "pnpm -C playground run dev",
     "prepublishOnly": "pnpm build",
     "type-check": "tsc",
     "verify-commit": "verify-commit-msg",

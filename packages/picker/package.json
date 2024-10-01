@@ -22,6 +22,17 @@
     "./style.css": {
       "import": "./lib/style.css",
       "require": "./lib/style.css"
+    },
+    "./package.json": "./package.json"
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./*.js"
+      ],
+      "./style.css": [
+        "./lib/style.css"
+      ]
     }
   },
   "files": [
@@ -38,6 +49,7 @@
     "prepublishOnly": "pnpm build"
   },
   "devDependencies": {
+    "rc-picker": "latest",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
@@ -55,5 +67,8 @@
     "url": "git+https://github.com/hunghg255/rc-ui.git",
     "directory": "packages/transformers"
   },
-  "bugs": "https://github.com/hunghg255/rc-ui/issues"
+  "bugs": "https://github.com/hunghg255/rc-ui/issues",
+  "dependencies": {
+    "dayjs": "^1.11.13"
+  }
 }
