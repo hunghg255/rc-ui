@@ -1,5 +1,3 @@
-
-
 # This repo is headless react component library based on rc-component
 
 ## Reference
