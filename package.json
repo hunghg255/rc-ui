@@ -13,6 +13,7 @@
     "build": "pnpm --filter \"./packages/**\" build",
     "docs": "pnpm -C docs run docs:dev",
     "playground": "pnpm -C playground run dev",
+    "playground:build": "pnpm run build && pnpm -C playground run build",
     "prepublishOnly": "pnpm build",
     "type-check": "tsc",
     "verify-commit": "verify-commit-msg",
