@@ -11,6 +11,7 @@
   },
   "scripts": {
     "build": "pnpm --filter \"./packages/**\" build",
+    "build:dev": "pnpm --filter \"./packages/**\" dev",
     "docs": "pnpm -C docs run docs:dev",
     "playground": "pnpm -C playground run dev",
     "playground:build": "pnpm run build && pnpm -C playground run build",

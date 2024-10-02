@@ -22,6 +22,17 @@ function App() {
 
   return (
     <>
+      <button
+        onClick={() => {
+          document.documentElement.classList.toggle('dark');
+        }}
+      >
+        Theme
+      </button>
+
+      <br />
+      <br />
+
       <div>
         <button onClick={() => setVisible(true)}>Click</button>
         <Modal visible={visible} onClose={() => setVisible(false)}>

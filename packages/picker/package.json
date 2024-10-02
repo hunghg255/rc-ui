@@ -45,6 +45,7 @@
     "node": ">=18.0.0"
   },
   "scripts": {
+    "dev": "vite build  --mode development --watch",
     "build": "vite build",
     "prepublishOnly": "pnpm build"
   },
