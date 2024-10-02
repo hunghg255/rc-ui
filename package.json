@@ -19,7 +19,7 @@
     "verify-commit": "verify-commit-msg",
     "prepare": "git-scm-hooks",
     "lint": "eslint . --cache",
-    "lint:fix": "npm run lint -- --fix",
+    "lint:fix": "eslint . --fix --quiet",
     "release": "bumpp",
     "publish:ci": "pnpm -r publish --access public --no-git-checks"
   },
