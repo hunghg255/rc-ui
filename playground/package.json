@@ -11,6 +11,7 @@
     "start": "npm run build && vite preview"
   },
   "dependencies": {
+    "@rc-ui/base": "workspace:*",
     "@rc-ui/dialog": "workspace:*",
     "@rc-ui/picker": "workspace:*",
     "dayjs": "^1.11.13",

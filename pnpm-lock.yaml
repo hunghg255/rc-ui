@@ -103,6 +103,15 @@ importers:
         specifier: ^4.2.3
         version: 4.2.3(@types/node@22.7.4)(rollup@4.21.1)(typescript@5.6.2)(vite@5.4.8(@types/node@22.7.4)(less@4.2.0)(lightningcss@1.25.1)(sass@1.79.4)(terser@5.31.3))
 
+  packages/base:
+    devDependencies:
+      react:
+        specifier: ^18.3.1
+        version: 18.3.1
+      react-dom:
+        specifier: ^18.3.1
+        version: 18.3.1(react@18.3.1)
+
   packages/dialog:
     dependencies:
       rc-dialog:
@@ -134,6 +143,9 @@ importers:
 
   playground:
     dependencies:
+      '@rc-ui/base':
+        specifier: workspace:*
+        version: link:../packages/base
       '@rc-ui/dialog':
         specifier: workspace:*
         version: link:../packages/dialog
