@@ -25,9 +25,10 @@
 }
 .rc-dialog-content {
   position: relative;
-  background-color: #ffffff;
-  border: none;
+  background-color:  hsl(var(--background));
+  border: 1px solid hsl(var(--border));
   background-clip: padding-box;
+  border-radius: var(--radius);
 }
 .rc-dialog-close {
   cursor: pointer;
@@ -51,10 +52,10 @@
   border-radius: 5px 5px 0 0;
   background: #fff;
   color: #666;
-  border-bottom: 1px solid #e9e9e9;
+  border-bottom: 1px solid hsl(var(--border));
 }
 .rc-dialog-footer {
-  border-top: 1px solid #e9e9e9;
+  border-top: 1px solid hsl(var(--border));
   padding: 10px 20px;
   text-align: right;
   border-radius: 0 0 5px 5px;

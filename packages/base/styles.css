@@ -1,6 +1,7 @@
 :root {
   --rc-white: #fff;
   --rc-black: #000;
+  --radius: 0.5rem;
 
   --background: 0 0% 100%;
   --foreground: 240 10% 3.9%;

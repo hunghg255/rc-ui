@@ -14,6 +14,7 @@
     "@rc-ui/base": "workspace:*",
     "@rc-ui/dialog": "workspace:*",
     "@rc-ui/picker": "workspace:*",
+    "@rc-ui/select": "workspace:*",
     "dayjs": "^1.11.13",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"

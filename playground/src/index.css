@@ -21,3 +21,13 @@ body {
 .dark body {
   background-color: black;
 }
+
+h1 {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #000;
+}
+
+.dark h1 {
+  color: white;
+}
