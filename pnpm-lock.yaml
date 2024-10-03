@@ -164,6 +164,9 @@ importers:
       '@rc-ui/picker':
         specifier: workspace:*
         version: link:../packages/picker
+      '@rc-ui/select':
+        specifier: workspace:*
+        version: link:../packages/select
       dayjs:
         specifier: ^1.11.13
         version: 1.11.13
