@@ -2388,3 +2388,162 @@ tr
 .rc-calender-rtl .rc-calender-footer-extra {
   direction: rtl;
 }
+
+/* multiple */
+.rc-picker-multiple .rc-picker-clear {
+  inset-inline-end: 11px;
+}
+
+.rc-picker-multiple.rc-picker-small .rc-picker-clear {
+  inset-inline-end: 7px;
+}
+
+.rc-picker-multiple .rc-picker-selection-item {
+  background: hsl(var(--accent));
+  border: 1px solid hsl(var(--border));
+}
+
+.rc-picker-multiple.rc-picker-small {
+  padding-block: 1px;
+  padding-inline-start: 3px;
+  min-height: 24px;
+}
+
+.rc-picker-multiple.rc-picker-small .rc-picker-selection-item {
+  height: 16px;
+  line-height: 14px;
+}
+
+.rc-picker-multiple {
+  padding-block: 1px;
+  padding-inline-start: 3px;
+  min-height: 32px;
+}
+
+.rc-picker-multiple .rc-picker-selection-item {
+  height: 24px;
+  line-height: 22px;
+}
+
+.rc-picker-multiple.rc-picker-large {
+  padding-block: 1px;
+  padding-inline-start: 3px;
+  min-height: 40px;
+}
+
+.rc-picker-multiple.rc-picker-large .rc-picker-selection-item {
+  height: 32px;
+  line-height: 30px;
+}
+
+.rc-picker.rc-picker-multiple {
+  width: 100%;
+  cursor: text;
+}
+
+.rc-picker.rc-picker-multiple .rc-picker-selector {
+  flex: auto;
+  padding: 0;
+  position: relative;
+}
+
+.rc-picker.rc-picker-multiple .rc-picker-selector:after {
+  margin: 0;
+}
+
+.rc-picker.rc-picker-multiple .rc-picker-selector .rc-picker-selection-placeholder {
+  position: absolute;
+  top: 50%;
+  inset-inline-start: 11px;
+  inset-inline-end: 0;
+  transform: translateY(-50%);
+  transition: all 0.3s;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  flex: 1;
+  color: rgba(0, 0, 0, 0.25);
+  pointer-events: none;
+}
+
+.rc-picker.rc-picker-multiple .rc-picker-selection-overflow {
+  position: relative;
+  display: flex;
+  flex: auto;
+  flex-wrap: wrap;
+  max-width: 100%;
+}
+
+.rc-picker.rc-picker-multiple .rc-picker-selection-overflow-item {
+  flex: none;
+  align-self: center;
+  max-width: 100%;
+  display: inline-flex;
+}
+
+.rc-picker.rc-picker-multiple .rc-picker-selection-overflow .rc-picker-selection-item {
+  display: flex;
+  align-self: center;
+  flex: none;
+  box-sizing: border-box;
+  max-width: 100%;
+  margin-block: 2px;
+  border-radius: 4px;
+  cursor: default;
+  transition: font-size 0.3s, line-height 0.3s, height 0.3s;
+  margin-inline-end: 4px;
+  padding-inline-start: 8px;
+  padding-inline-end: 4px;
+}
+
+.rc-picker-disabled.rc-picker.rc-picker-multiple .rc-picker-selection-overflow .rc-picker-selection-item {
+  color: rgba(0, 0, 0, 0.25);
+  border-color: transparent;
+  cursor: not-allowed;
+}
+
+.rc-picker.rc-picker-multiple .rc-picker-selection-overflow .rc-picker-selection-item-content {
+  display: inline-block;
+  margin-inline-end: 4px;
+  overflow: hidden;
+  white-space: pre;
+  text-overflow: ellipsis;
+}
+
+.rc-picker.rc-picker-multiple .rc-picker-selection-overflow .rc-picker-selection-item-remove {
+  display: inline-flex;
+  align-items: center;
+  color: hsl(var(--foreground));
+  font-style: normal;
+  line-height: inherit;
+  text-align: center;
+  text-transform: none;
+  vertical-align: -0.125em;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-weight: bold;
+  font-size: 10px;
+  cursor: pointer;
+}
+
+.rc-picker.rc-picker-multiple .rc-picker-selection-overflow .rc-picker-selection-item-remove>* {
+  line-height: 1;
+}
+
+.rc-picker.rc-picker-multiple .rc-picker-selection-overflow .rc-picker-selection-item-remove svg {
+  display: inline-block;
+}
+
+.rc-picker.rc-picker-multiple .rc-picker-selection-overflow .rc-picker-selection-item-remove>.anticon {
+  vertical-align: -0.2em;
+}
+
+.rc-picker.rc-picker-multiple .rc-picker-multiple-input {
+  width: 0;
+  height: 0;
+  border: 0;
+  visibility: hidden;
+  position: absolute;
+  z-index: -1;
+}

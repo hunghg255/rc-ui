@@ -1,0 +1,72 @@
+{
+  "name": "@rc-ui/tooltip",
+  "type": "module",
+  "version": "0.0.1",
+  "description": "rc ui tooltip",
+  "sideEffects": false,
+  "license": "MIT",
+  "main": "./lib/tooltip.cjs",
+  "module": "./lib/tooltip.js",
+  "types": "./lib/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./lib/index.d.ts",
+        "default": "./lib/tooltip.js"
+      },
+      "require": {
+        "types": "./lib/index.d.cts",
+        "default": "./lib/tooltip.cjs"
+      }
+    },
+    "./style.css": {
+      "import": "./lib/style.css",
+      "require": "./lib/style.css"
+    },
+    "./package.json": "./package.json"
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./*.js"
+      ],
+      "./style.css": [
+        "./lib/style.css"
+      ]
+    }
+  },
+  "files": [
+    "lib",
+    "package.json",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "dev": "vite build  --mode development --watch",
+    "build": "vite build",
+    "prepublishOnly": "pnpm build"
+  },
+  "devDependencies": {
+    "rc-tooltip": "latest",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "peerDependencies": {
+    "react": ">= 17.0.0",
+    "react-dom": ">= 17.0.0"
+  },
+  "keywords": [
+    "react"
+  ],
+  "author": "hunghg255 <giahunghust@gmail.com>",
+  "homepage": "https://github.com/hunghg255/rc-ui#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hunghg255/rc-ui.git",
+    "directory": "packages/transformers"
+  },
+  "bugs": "https://github.com/hunghg255/rc-ui/issues"
+}

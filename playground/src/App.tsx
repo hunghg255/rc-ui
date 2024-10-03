@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 import Modal from '@rc-ui/dialog';
 import Select from '@rc-ui/select';
+import Tooltip from '@rc-ui/tooltip';
 import { Picker, PickerPanel, RangePicker } from '@rc-ui/picker';
 
 import enUS from 'rc-picker/lib/locale/en_US';
@@ -13,6 +14,7 @@ import '@rc-ui/base/style.css';
 import '@rc-ui/dialog/style.css';
 import '@rc-ui/picker/style.css';
 import '@rc-ui/select/style.css';
+import '@rc-ui/tooltip/style.css';
 
 const options: any = [];
 
@@ -72,6 +74,7 @@ function App() {
           }}
           suffixIcon={<span>suffix</span>}
         />
+
         <Picker locale={enUS} picker='week' />
         <Picker locale={enUS} picker='month' />
         <Picker locale={enUS} picker='quarter' />
@@ -79,13 +82,24 @@ function App() {
 
         <Picker locale={enUS} picker='time' />
 
-        <RangePicker
-          locale={enUS}
-          disabledDate={disabledDate}
-          onChange={(v) => {
-            console.log(v);
-          }}
-        />
+        <div>
+          <RangePicker
+            locale={enUS}
+            disabledDate={disabledDate}
+            onChange={(v) => {
+              console.log(v);
+            }}
+          />
+          <br />
+          <RangePicker
+            showTime
+            locale={enUS}
+            disabledDate={disabledDate}
+            onChange={(v) => {
+              console.log(v);
+            }}
+          />
+        </div>
         <PickerPanel
           locale={enUS}
           disabledDate={disabledDate}
@@ -93,6 +107,38 @@ function App() {
             console.log('a', v);
           }}
         />
+
+        <div
+          style={{
+            maxWidth: 300,
+            margin: '0 auto',
+          }}
+        >
+          <Picker
+            multiple
+            locale={enUS}
+            onChange={(v) => {
+              console.log(v);
+            }}
+          />
+          <Picker
+            multiple
+            maxTagCount='responsive'
+            locale={enUS}
+            onChange={(v) => {
+              console.log(v);
+            }}
+          />
+        </div>
+        <div>
+          <Picker
+            showTime
+            locale={enUS}
+            onChange={(v) => {
+              console.log(v);
+            }}
+          />
+        </div>
       </div>
       <br />
       <br />
@@ -127,6 +173,28 @@ function App() {
           options={[{ value: 'lucy', label: 'Lucy' }]}
         />
         <Select mode='tags' style={{ width: '100%' }} tokenSeparators={[',']} options={options} />
+      </div>
+      <br />
+      <br />
+      <div>
+        <h1>Tooltip</h1>
+        <div
+          style={{
+            width: 400,
+            height: 400,
+            overflow: 'scroll',
+            background: 'gray',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <div>
+            <Tooltip placement='top' overlay='HI asdas asdsa asdas asdas asdsa '>
+              <span>Helloasdsadsad</span>
+            </Tooltip>
+          </div>
+        </div>
       </div>
     </>
   );

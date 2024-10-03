@@ -162,10 +162,6 @@
   display: block;
 }
 
-.rc-select .rc-select-clear:hover {
-  color: rgba(0, 0, 0, 0.45);
-}
-
 .rc-select:hover .rc-select-clear {
   opacity: 1;
 }
@@ -569,7 +565,7 @@
   margin-top: 2px;
   margin-bottom: 2px;
   line-height: 22px;
-  background: hsl(var(--background));
+  background: hsl(var(--accent));
   border: 1px solid hsl(var(--border));
   border-radius: 4px;
   cursor: default;
