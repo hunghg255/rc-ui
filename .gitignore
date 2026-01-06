@@ -31,3 +31,4 @@ docs/.vitepress/cache
 cache
 lib
 .eslintcache
+.turbo

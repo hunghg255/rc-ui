@@ -20,18 +20,12 @@ import { PreviewProvider } from './provider';
 import { tsconfig } from './tsconfig';
 import { utils } from './utils';
 
-type ComponentModule = {
-  name: string;
-  dependencies?: Record<string, string>;
-  devDependencies?: Record<string, string>;
-  files?: { content: string }[];
-};
-
 type RegistryItem = {
-  dependencies?: Record<string, string>;
-  devDependencies?: Record<string, string>;
-  registryDependencies?: Record<string, string>;
-  files?: { path: string; content: string }[];
+  name: string;
+  dependencies?: string[];
+  devDependencies?: string[];
+  registryDependencies?: string[];
+  files?: { path: string; content: string, type: string, target: string }[];
 };
 
 type PreviewProps = {
@@ -41,184 +35,114 @@ type PreviewProps = {
 };
 
 // Caches to avoid repeated imports
-const componentModuleCache = new Map<string, ComponentModule>();
 const registryCache = new Map<string, RegistryItem>();
+const packageCache = new Map<string, any>();
 
-// Regexes to parse dependencies, registry, and components
-const dependencyRegex = /^(.+?)(?:@(.+))?$/;
-const registryRegex = /@\/registry\/new-york\/ui\//g;
-const kiboRegex = /@\/components\/ui\/(?!rcui\/)([^'"\s]+)/g;
-
-const parseDependencyVersion = (dependency: string) => {
-  const [name, version] =
-    (dependency as string).match(dependencyRegex)?.slice(1) ?? [];
-  return { name, version: version ?? 'latest' };
-};
-
-const parseContent = (content: string) =>
-  content.replace(registryRegex, '@/components/ui/');
-
-const processDependencies = (
-  deps: Record<string, string> | undefined,
-  target: Record<string, string>
-) => {
-  if (!deps) {
-    return;
+const parseShadcnHooks = async (results: any, name: string) => {
+  let registry = registryCache.get(name);
+  if (!registry) {
+    registry = (await import(
+      `./shadcn/${name}.json`
+    )) as RegistryItem;
+    registryCache.set(name, registry);
   }
 
-  for (const dep of Object.values(deps)) {
-    const { name, version } = parseDependencyVersion(dep);
-    target[name] = version;
+  if (registry?.dependencies?.length) {
+    const dependencies = registry?.dependencies?.reduce((acc: any, curr: any) => {
+      acc[curr] = 'latest';
+      return acc;
+    }, {} );
+
+    Object.assign(results.dependencies, dependencies);
   }
-};
 
-const processComponentModule = async (
-  mod: ComponentModule,
-  files: Record<string, string>,
-  dependencies: Record<string, string>,
-  devDependencies: Record<string, string>
-) => {
-  const componentContent = mod.files?.[0]?.content ?? '';
-  files[`/components/ui/${mod.name}.tsx`] = parseContent(componentContent);
+  if (registry?.devDependencies?.length) {
+    const devDependencies = registry?.devDependencies?.reduce((acc: any, curr: any) => {
+      acc[curr] = 'latest';
+      return acc;
+    }, {} );
 
-  // Parse the component content to find additional dependencies
-  const nestedComponents = await parseShadcnComponents(componentContent);
-  Object.assign(files, nestedComponents.files);
-  Object.assign(dependencies, nestedComponents.dependencies);
-  Object.assign(devDependencies, nestedComponents.devDependencies);
+    Object.assign(results.devDependencies, devDependencies);
+  }
 
-  processDependencies(mod.dependencies, dependencies);
-  processDependencies(mod.devDependencies, devDependencies);
-};
+  registry?.files?.map((file: any) => {
+    results.files[file.target] = file.content;
+  });
 
-const parseShadcnComponents = async (str: string) => {
-  const parsedString = parseContent(str);
-  const matches = parsedString.match(kiboRegex);
+  if (registry.registryDependencies?.length) {
+    for (let index = 0; index < registry.registryDependencies.length; index++) {
+      const dependency = registry.registryDependencies[index];
+      let mod = registryCache.get(dependency.replace('.json', ''));
 
+      if (mod) {
+        continue;
+      }
+
+      if (!mod) {
+        mod = (await import(
+          `./shadcn/${dependency?.includes('json') ? dependency : `${dependency}.json`}`
+        )).default as RegistryItem;
+        registryCache.set(dependency.replace('.json', ''), mod as RegistryItem);
+      }
+
+      if (mod?.name) {
+        await parseShadcnHooks(results, mod?.name);
+      }
+    }
+  }
+}
+
+
+const parseShadcnComponentToSandbox = async (name: string, codeDemo: string) => {
+  const results = {
+    files: {} as Record<string, string>,
+    dependencies: {} as Record<string, string>,
+    devDependencies: {} as Record<string, string>,
+  }
+  // // Set up initial files
+  Object.assign(results.files, {
+    '/App.tsx': codeDemo,
+    '/tsconfig.json': tsconfig,
+    // '/lib/utils.ts': utils,
+    // '/lib/content.ts': content,
+  });
+
+  await parseShadcnHooks(results, name);
+
+  return results;
+}
+
+const init = async (name:string, code:string) => {
   const result = {
     files: {} as Record<string, string>,
     dependencies: {} as Record<string, string>,
     devDependencies: {} as Record<string, string>,
-  };
-
-  if (!matches) {
-    return result;
   }
 
-  const components = [
-    ...new Set(matches.map((m) => m.replace('@/components/ui/', ''))),
-  ];
+  const dataCache = packageCache.get(name);
 
-  await Promise.all(
-    components.map(async (component) => {
-      try {
-        // Check cache first
-        let mod = componentModuleCache.get(component);
-        if (!mod) {
-          mod = (await import(`./shadcn/${component}.json`)) as ComponentModule;
-          componentModuleCache.set(component, mod);
-        }
-
-        await processComponentModule(
-          mod,
-          result.files,
-          result.dependencies,
-          result.devDependencies
-        );
-      } catch (error) {
-        console.warn(`Failed to load shadcn component: ${component}`);
-      }
-    })
-  );
+  if (dataCache) {
+    const { files, dependencies, devDependencies } = dataCache;
+    result.files = files;
+    result.dependencies = dependencies;
+    result.devDependencies = devDependencies;
+  } else {
+    const { files, dependencies, devDependencies } = await parseShadcnComponentToSandbox(name, code);
+    packageCache.set(name, { files, dependencies, devDependencies });
+    result.files = files;
+    result.dependencies = dependencies;
+    result.devDependencies = devDependencies;
+  }
 
   return result;
-};
+}
+
 
 export const Preview = async ({
   name,
   code,
-  dependencies: demoDependencies,
 }: PreviewProps) => {
-  const [packageName, componentName] = name.split('/');
-
-  let registry = registryCache.get(packageName);
-  if (!registry) {
-    registry = (await import(
-      `../../public/registry/${packageName}.json`
-    )) as RegistryItem;
-    registryCache.set(packageName, registry);
-  }
-
-  const [, initialParsedComponents] = await Promise.all([
-    Promise.resolve(registry),
-    parseShadcnComponents(code),
-  ]);
-
-  const { files, dependencies, devDependencies } = initialParsedComponents;
-
-  // Set up initial files
-  Object.assign(files, {
-    '/App.tsx': code,
-    '/tsconfig.json': tsconfig,
-    '/lib/utils.ts': utils,
-    '/lib/content.ts': content,
-  });
-
-  const selectedFile = registry.files?.find(
-    (file) => (file.path === `${componentName ?? 'index'}.tsx`)
-  );
-  const selectedFileCSS = registry.files?.find(
-    (file) => (file.path.includes('.css'))
-  );
-  const selectedComponentContent = parseContent(selectedFile?.content ?? '');
-  const selectedComponentContentCSS = parseContent(selectedFileCSS?.content ?? '');
-
-  // Parse the selected component content
-  const selectedComponentDeps = await parseShadcnComponents(
-    selectedComponentContent
-  );
-  const selectedComponentContentCSSDeps = await parseShadcnComponents(
-    selectedComponentContentCSS
-  );
-  Object.assign(files, selectedComponentDeps.files);
-  Object.assign(dependencies, selectedComponentDeps.dependencies);
-  Object.assign(devDependencies, selectedComponentDeps.devDependencies);
-  Object.assign(files, selectedComponentContentCSSDeps.files);
-  Object.assign(dependencies, selectedComponentContentCSSDeps.dependencies);
-  Object.assign(devDependencies, selectedComponentContentCSSDeps.devDependencies);
-
-  // Process registry dependencies
-  if (registry.registryDependencies) {
-    await Promise.all(
-      Object.values(registry.registryDependencies).map(async (dependency) => {
-        let mod = componentModuleCache.get(dependency);
-        if (!mod) {
-          mod = (await import(
-            `./shadcn/${dependency}.json`
-          )) as ComponentModule;
-          componentModuleCache.set(dependency, mod);
-        }
-
-        await processComponentModule(mod, files, dependencies, devDependencies);
-      })
-    );
-  }
-
-  files[`/components/ui/rcui/${name}.tsx`] = parseContent(
-    selectedComponentContent
-  );
-  files[`/components/ui/rcui/styles.css`] = parseContent(
-    selectedComponentContentCSS
-  );
-
-  // Process all dependencies
-  for (const deps of [
-    registry.dependencies,
-    registry.devDependencies,
-    demoDependencies,
-  ]) {
-    processDependencies(deps, dependencies);
-  }
+  const { files, dependencies, devDependencies } = await init(name, code);
 
   return (
     <PreviewProvider
@@ -236,14 +160,11 @@ export const Preview = async ({
           clsx: 'latest',
           'tailwind-merge': 'latest',
           'class-variance-authority': 'latest',
-
-          // Tailwind dependencies
+          // shadcn/ui tailwind plugins
           tailwindcss: 'latest',
           'tailwindcss-animate': 'latest',
+          // Tailwind dependencies
           ...dependencies,
-
-          // Common utilities
-          'date-fns': 'latest',
         },
         devDependencies: {
           autoprefixer: 'latest',
